@@ -15,16 +15,16 @@ def home():
 
         news = request.form["news"]
 
-        vector = vectorizer.transform([news])
-
-        result = model.predict(vector)
-
-        print("Prediction Value =", result[0])
-
-        if result[0] == 0:
-            prediction = "Fake News"
+        if len(news.split()) < 20:
+            prediction = "Please enter a full news article (minimum 20 words)."
         else:
-            prediction = "Real News"
+            vector = vectorizer.transform([news])
+            result = model.predict(vector)
+
+            if result[0] == 0:
+                prediction = "Fake News"
+            else:
+                prediction = "Real News"
 
     return render_template(
         "index.html",
