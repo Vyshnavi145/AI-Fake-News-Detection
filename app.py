@@ -1,10 +1,13 @@
 from flask import Flask, render_template, request
-import joblib
+import google.generativeai as genai
+import os
 
 app = Flask(__name__)
 
-model = joblib.load("model/fake_news_model.pkl")
-vectorizer = joblib.load("model/vectorizer.pkl")
+# Gemini API Key from Render Environment Variables
+genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
+model = genai.GenerativeModel("gemini-2.5-flash")
 
 @app.route("/", methods=["GET", "POST"])
 def home():
@@ -15,23 +18,26 @@ def home():
 
         news = request.form["news"]
 
-        if len(news.split()) < 20:
-            prediction = "Please enter a full news article (minimum 20 words)."
-        else:
-            vector = vectorizer.transform([news])
-            result = model.predict(vector)
+        response = model.generate_content(
+            f"""
+            Analyze the following claim or news article.
 
-            if result[0] == 0:
-                prediction = "Fake News"
-            else:
-                prediction = "Real News"
+            Return:
+            1. Verdict (True / False / Uncertain)
+            2. Explanation
+            3. Confidence
+
+            Claim:
+            {news}
+            """
+        )
+
+        prediction = response.text
 
     return render_template(
         "index.html",
         prediction=prediction
     )
-
-import os
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
