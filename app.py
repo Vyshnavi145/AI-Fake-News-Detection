@@ -19,6 +19,8 @@ def home():
 
         result = model.predict(vector)
 
+        print("Prediction Value =", result[0])
+
         if result[0] == 0:
             prediction = "Fake News"
         else:
