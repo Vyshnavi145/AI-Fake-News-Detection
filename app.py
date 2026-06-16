@@ -4,7 +4,6 @@ import os
 
 app = Flask(__name__)
 
-# Gemini API Key from Render Environment Variables
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
 
 model = genai.GenerativeModel("gemini-2.5-flash")
@@ -38,6 +37,23 @@ def home():
         "index.html",
         prediction=prediction
     )
+
+
+
+@app.route("/about")
+def about():
+    return render_template("about.html")
+
+
+@app.route("/history")
+def history():
+    return render_template("history.html")
+
+
+@app.route("/statistics")
+def statistics():
+    return render_template("statistics.html")
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
