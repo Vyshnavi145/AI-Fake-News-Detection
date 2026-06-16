@@ -1,42 +1,75 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>AI Fake News Detection</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI News Verifier</title>
 
-    <link rel="stylesheet"
-          href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
 <body>
 
-<div class="container">
+    <!-- Navbar -->
+    <nav class="navbar">
+        <div class="logo">
+            🛡️ AI News Verifier
+        </div>
 
-    <h1>AI Fake News Detection System</h1>
+        <ul class="nav-links">
+            <li>🏠 Home</li>
+            <li>🕒 History</li>
+            <li>📊 Statistics</li>
+            <li>ℹ️ About</li>
+        </ul>
+    </nav>
 
-    <form method="POST">
+    <div class="main-container">
 
-        <textarea
-            name="news"
-            rows="12"
-            cols="80"
-            placeholder="Paste the complete news article here..."
-            required>
-        </textarea>
+        <!-- Left Side -->
+        <div class="input-card">
 
-        <br><br>
+            <h2>📰 Enter News or Article</h2>
 
-        <button type="submit">
-            Check News
-        </button>
+            <form method="POST">
 
-    </form>
-    {% if prediction %}
-    <div class="result">
-        {{ prediction }}
+                <textarea
+                    name="news"
+                    placeholder="Paste any claim, statement, or news article here..."
+                    required></textarea>
+
+                <button type="submit">
+                    Verify News
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- Right Side -->
+        <div class="result-card">
+
+            <h2>✅ Verification Result</h2>
+
+            {% if prediction %}
+
+            <div class="result-box">
+                <pre>{{ prediction }}</pre>
+            </div>
+
+            {% else %}
+
+            <div class="empty-result">
+                Enter an article and click Verify News.
+            </div>
+
+            {% endif %}
+
+        </div>
+
     </div>
-    {% endif %}
-</div>
 
 </body>
+
 </html>
